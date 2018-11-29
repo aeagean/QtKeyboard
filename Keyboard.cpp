@@ -44,13 +44,13 @@ const QList<Modes> modeListBar3 = {
     {{Qt::Key_B, "b"}, {Qt::Key_B, "B"}, {Qt::Key_unknown, ":"}},
     {{Qt::Key_N, "n"}, {Qt::Key_N, "N"}, {Qt::Key_Semicolon, ";"}},
     {{Qt::Key_M, "m"}, {Qt::Key_M, "M"}, {Qt::Key_Slash, "/"}},
-    {{Qt::Key_Backspace, "", "Del"}}
+    {{Qt::Key_Backspace, "", "DEL"}}
 };
 
 const QList<Modes> modeListBar4 = {
-    {{Qt::Key_Mode_switch, "", "Swi"}},
-    {{Qt::Key_Space,  " ", "Spa"}},
-    {{Qt::Key_Enter,  "", "Ent"}}
+    {{Qt::Key_Mode_switch, "", "?123"}},
+    {{Qt::Key_Space,  " ", " "}},
+    {{Qt::Key_Enter,  "", "Enter"}}
 };
 
 const QList<ModesList> modesListBar = { modeListBar1, modeListBar2, modeListBar3, modeListBar4 };
