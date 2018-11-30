@@ -6,6 +6,7 @@ using namespace AeaQt;
 
 const int normalButtonWidth = 55;
 const int normalButtonHeight = 45;
+const QString deleteIcon = "/home/strong/android/otherspace/QtKeyboard/Image/Delete_ios7@2x.png";
 
 typedef QList<KeyButton::Mode> Modes;
 typedef QList<Modes> ModesList;
@@ -36,7 +37,7 @@ const QList<Modes> modeListBar2 = {
 };
 
 const QList<Modes> modeListBar3 = {
-    {{Qt::Key_CapsLock, "", "Cap"}},
+    {{Qt::Key_CapsLock, "", "切换"}},
     {{Qt::Key_Z, "z"}, {Qt::Key_Z, "Z"}, {Qt::Key_ParenLeft, "("}},
     {{Qt::Key_X, "x"}, {Qt::Key_X, "X"}, {Qt::Key_ParenLeft, ")"}},
     {{Qt::Key_C, "c"}, {Qt::Key_C, "C"}, {Qt::Key_Minus, "-"}},
@@ -44,13 +45,13 @@ const QList<Modes> modeListBar3 = {
     {{Qt::Key_B, "b"}, {Qt::Key_B, "B"}, {Qt::Key_unknown, ":"}},
     {{Qt::Key_N, "n"}, {Qt::Key_N, "N"}, {Qt::Key_Semicolon, ";"}},
     {{Qt::Key_M, "m"}, {Qt::Key_M, "M"}, {Qt::Key_Slash, "/"}},
-    {{Qt::Key_Backspace, "", "DEL"}}
+    {{Qt::Key_Backspace, "", "退格"}}
 };
 
 const QList<Modes> modeListBar4 = {
     {{Qt::Key_Mode_switch, "", "?123"}},
-    {{Qt::Key_Space,  " ", " "}},
-    {{Qt::Key_Enter,  "", "Enter"}}
+    {{Qt::Key_Space,  " ", "空格"}},
+    {{Qt::Key_Enter,  "", "回车"}}
 };
 
 const QList<ModesList> modesListBar = { modeListBar1, modeListBar2, modeListBar3, modeListBar4 };
@@ -110,6 +111,9 @@ KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
         case Qt::Key_Enter:
         case Qt::Key_CapsLock:
         case Qt::Key_Backspace: {
+//            button->setAutoRepeat(true);
+            button->setIcon(QIcon(deleteIcon));
+            button->setIconSize(QSize(normalButtonWidth, normalButtonHeight));
             button->setMinimumSize(2*normalButtonWidth, normalButtonHeight);
             button->setMaximumSize(2*normalButtonWidth, normalButtonHeight);
             break;
