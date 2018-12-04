@@ -26,3 +26,6 @@ HEADERS  += \
     AbstractKeyboard.h \
     KeyButton.h \
     Keyboard.h
+
+RESOURCES += \
+    Resources.qrc

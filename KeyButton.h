@@ -41,6 +41,7 @@ private slots:
 private:
     Type find(const QString &value);
     Mode find(Type type);
+    void setText(const QString &text);
 
 private:
     Mode        m_preMode;

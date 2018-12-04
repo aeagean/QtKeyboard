@@ -36,6 +36,11 @@ KeyButton::Mode KeyButton::find(KeyButton::Type type)
     return m_modes.first();
 }
 
+void KeyButton::setText(const QString &text)
+{
+    QPushButton::setText(QString::fromUtf8(text.toStdString().data()));
+}
+
 KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
     QPushButton(parent)
 {
@@ -56,8 +61,7 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
 
     if (!modes.isEmpty()) {
         m_preMode = m_mode = m_modes.first();
-        setText(QString::fromUtf8(m_mode.display.toStdString().data()));
-//        setText(QStringLiteral("同一个世界，同一个梦想！"));
+        setText(m_mode.display);
     }
 
     connect(this, SIGNAL(pressed()), this, SLOT(onPressed()));
