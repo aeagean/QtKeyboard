@@ -21,6 +21,7 @@ public:
 
 public slots:
     void update(const QString &text);
+    void onKeyPressed(const int &key, const QString &value);
 
 private slots:
     void switchCapsLock();

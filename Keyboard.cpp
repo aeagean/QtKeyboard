@@ -102,6 +102,11 @@ void Keyboard::update(const QString &text)
     qDebug()<<">>>>>>: "<<text;
 }
 
+void Keyboard::onKeyPressed(const int &key, const QString &value)
+{
+    qDebug()<<"key: "<<key<<"value: "<<value;
+}
+
 void Keyboard::switchCapsLock()
 {
     QList<KeyButton *> buttons = findChildren<KeyButton *>();
@@ -129,7 +134,8 @@ void Keyboard::switchEnOrCh()
 KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
 {
     KeyButton *button = new KeyButton(modes, this);
-    button->onReponse((AbstractKeyboard*)this, SIGNAL(keyPressed(int, QString)));
+//    button->onReponse((AbstractKeyboard*)this, SIGNAL(keyPressed(int, QString)));
+    button->onReponse(this, SLOT(onKeyPressed(const int&, const QString&)));
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     switch (button->mode().key) {
     case Qt::Key_CapsLock:
