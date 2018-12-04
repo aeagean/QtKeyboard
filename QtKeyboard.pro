@@ -20,12 +20,14 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 SOURCES += main.cpp \
     KeyButton.cpp \
-    Keyboard.cpp
+    Keyboard.cpp \
+    KeyboardManager.cpp
 
 HEADERS  += \
     AbstractKeyboard.h \
     KeyButton.h \
-    Keyboard.h
+    Keyboard.h \
+    KeyboardManager.h
 
 RESOURCES += \
     Resources.qrc

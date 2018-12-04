@@ -31,6 +31,7 @@ public:
 
     void switchCapsLock();
     void switchSpecialChar();
+    void switching(); /* Cycle switch. */
 
 signals:
     void pressed(int key, QString value);
@@ -41,6 +42,7 @@ private slots:
 private:
     Type find(const QString &value);
     Mode find(Type type);
+    Mode findNext();
     void setText(const QString &text);
 
 private:

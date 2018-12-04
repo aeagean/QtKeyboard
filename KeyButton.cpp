@@ -36,6 +36,21 @@ KeyButton::Mode KeyButton::find(KeyButton::Type type)
     return m_modes.first();
 }
 
+KeyButton::Mode KeyButton::findNext()
+{
+    for(int i = 0; i < m_modes.count(); i++) {
+        KeyButton::Mode mode = m_modes[i];
+        if (mode.display == m_mode.display) {
+            if (i+1 < m_modes.count())
+                return m_modes.at(i+1);
+            else
+                return m_modes.first();
+        }
+    }
+
+    return m_modes.first();
+}
+
 void KeyButton::setText(const QString &text)
 {
     QPushButton::setText(QString::fromUtf8(text.toStdString().data()));
@@ -97,6 +112,12 @@ void KeyButton::switchSpecialChar()
         m_mode = find(SpecialChar);
     }
 
+    setText(m_mode.display);
+}
+
+void KeyButton::switching()
+{
+    m_mode = findNext();
     setText(m_mode.display);
 }
 

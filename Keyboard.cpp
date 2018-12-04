@@ -56,6 +56,7 @@ const QList<Modes> modeListBar3 = {
 
 const QList<Modes> modeListBar4 = {
     {{Qt::Key_Mode_switch, "", "?123"}},
+    {{Qt::Key_Context1, "", "中"}, {Qt::Key_Context1, "", "En"}},
     {{Qt::Key_Space,  " ", "空格"}},
     {{Qt::Key_Enter,  "", "回车"}}
 };
@@ -90,7 +91,15 @@ Keyboard::Keyboard(QWidget *parent) :
         else if (button->mode().key == Qt::Key_Mode_switch) {
             connect(button, SIGNAL(pressed()), this, SLOT(switchSpecialChar()));
         }
+        else if (button->mode().key == Qt::Key_Context1) {
+            connect(button, SIGNAL(pressed()), this, SLOT(switchEnOrCh()));
+        }
     }
+}
+
+void Keyboard::update(const QString &text)
+{
+    qDebug()<<">>>>>>: "<<text;
 }
 
 void Keyboard::switchCapsLock()
@@ -107,29 +116,45 @@ void Keyboard::switchSpecialChar()
         button->switchSpecialChar();
 }
 
+void Keyboard::switchEnOrCh()
+{
+    QList<KeyButton *> buttons = findChildren<KeyButton *>();
+    foreach(KeyButton *button, buttons) {
+        if (button->mode().key == Qt::Key_Context1)
+            button->switching();
+        button->switchCapsLock();
+    }
+}
+
 KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
 {
     KeyButton *button = new KeyButton(modes, this);
     button->onReponse((AbstractKeyboard*)this, SIGNAL(keyPressed(int, QString)));
     button->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
     switch (button->mode().key) {
-        case Qt::Key_Mode_switch:
-        case Qt::Key_Enter:
-        case Qt::Key_CapsLock:
-        case Qt::Key_Backspace: {
-//            button->setAutoRepeat(true);
-            button->setIcon(QIcon(deleteIcon));
-            button->setIconSize(QSize(normalButtonWidth, normalButtonHeight));
-            button->setMinimumSize(2*normalButtonWidth, normalButtonHeight);
-            button->setMaximumSize(2*normalButtonWidth, normalButtonHeight);
-            break;
-        }
-        case Qt::Key_Space: {
-            break;
-        }
-        default: {
-            button->setMinimumSize(normalButtonWidth, normalButtonHeight);
-        }
+    case Qt::Key_CapsLock:
+    case Qt::Key_Backspace: {
+        button->setIconSize(QSize(normalButtonWidth, normalButtonHeight));
+        button->setMinimumSize(2*normalButtonWidth, normalButtonHeight);
+        button->setMaximumSize(2*normalButtonWidth, normalButtonHeight);
+        break;
+    }
+    case Qt::Key_Mode_switch:
+    case Qt::Key_Context1: {
+        button->setMinimumSize(1.5*normalButtonWidth, normalButtonHeight);
+        button->setMaximumSize(1.5*normalButtonWidth, normalButtonHeight);
+        break;
+    }
+    case Qt::Key_Enter: {
+        button->setMinimumSize(3*normalButtonWidth, normalButtonHeight);
+        button->setMaximumSize(3*normalButtonWidth, normalButtonHeight);
+    }
+    case Qt::Key_Space: {
+        break;
+    }
+    default: {
+        button->setMinimumSize(normalButtonWidth, normalButtonHeight);
+    }
     }
     return button;
 }

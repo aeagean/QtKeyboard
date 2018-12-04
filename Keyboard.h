@@ -18,9 +18,14 @@ class Keyboard : public AbstractKeyboard
 public:
     Keyboard(QWidget *parent = NULL);
 
+
+public slots:
+    void update(const QString &text);
+
 private slots:
     void switchCapsLock();
     void switchSpecialChar();
+    void switchEnOrCh();
 
 private:
     KeyButton *createButton(QList<KeyButton::Mode> modes);
