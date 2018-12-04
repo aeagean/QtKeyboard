@@ -1,3 +1,9 @@
+/**********************************************************
+Author: 微信公众号(你才小学生)
+WeChat public platform: nicaixiaoxuesheng
+Email:  2088201923@qq.com
+**********************************************************/
+
 #include "KeyButton.h"
 #include <QDebug>
 
@@ -50,7 +56,8 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
 
     if (!modes.isEmpty()) {
         m_preMode = m_mode = m_modes.first();
-        setText(m_mode.display);
+        setText(QString::fromUtf8(m_mode.display.toStdString().data()));
+//        setText(QStringLiteral("同一个世界，同一个梦想！"));
     }
 
     connect(this, SIGNAL(pressed()), this, SLOT(onPressed()));
