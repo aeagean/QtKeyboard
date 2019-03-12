@@ -9,6 +9,7 @@ Email:  2088201923@qq.com
 
 #include "AbstractKeyboard.h"
 #include "KeyButton.h"
+#include <QLayout>
 
 namespace AeaQt {
 
@@ -18,10 +19,12 @@ class Keyboard : public AbstractKeyboard
 public:
     Keyboard(QWidget *parent = NULL);
 
-
 public slots:
     void update(const QString &text);
     void onKeyPressed(const int &key, const QString &value);
+
+protected:
+    void resizeEvent(QResizeEvent *e);
 
 private slots:
     void switchCapsLock();
@@ -30,6 +33,11 @@ private slots:
 
 private:
     KeyButton *createButton(QList<KeyButton::Mode> modes);
+    QHBoxLayout *h1();
+    QHBoxLayout *h2();
+    QHBoxLayout *h3();
+    QHBoxLayout *h4();
+    void resizeButton();
 };
 
 }
