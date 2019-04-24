@@ -6,7 +6,9 @@ Email:  2088201923@qq.com
 
 #include "Keyboard.h"
 #include <QVBoxLayout>
+#include <QApplication>
 #include <QDebug>
+#include <QLineEdit>
 
 using namespace AeaQt;
 
@@ -71,7 +73,11 @@ Keyboard::Keyboard(QWidget *parent) :
     AbstractKeyboard(parent)
 {
     setFixedSize(850, 320);
-//    resize(480, 320);
+    resizeButton();
+
+    QLineEdit *textInput = new QLineEdit(this);
+    textInput->show();
+
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
     QVBoxLayout *layout = new QVBoxLayout();
@@ -80,23 +86,18 @@ Keyboard::Keyboard(QWidget *parent) :
     layout->addLayout(h2());
     layout->addLayout(h3());
     layout->addLayout(h4());
+//    layout->addLayout(h5());
 
     mainLayout->addStretch();
     mainLayout->addLayout(layout);
     mainLayout->addStretch();
 
     setLayout(mainLayout);
-    resizeButton();
 }
 
 void Keyboard::update(const QString &text)
 {
     qDebug()<<">>>>>>: "<<text;
-}
-
-void Keyboard::onKeyPressed(const int &key, const QString &value)
-{
-    qDebug()<<"key: "<<key<<"value: "<<value;
 }
 
 void Keyboard::resizeEvent(QResizeEvent *e)
@@ -191,6 +192,19 @@ QHBoxLayout *Keyboard::h4()
         KeyButton *button = createButton(modeListBar4.at(i));
         h->addWidget(button);
     }
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
+}
+
+QHBoxLayout *Keyboard::h5()
+{
+    QHBoxLayout *main = new QHBoxLayout;
+    QHBoxLayout *h = new QHBoxLayout;
+    QLineEdit *textInput = new QLineEdit;
+    textInput->setObjectName("dddd");
+    h->addWidget(textInput);
     main->addStretch();
     main->addLayout(h);
     main->addStretch();

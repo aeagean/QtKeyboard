@@ -21,7 +21,6 @@ public:
 
 public slots:
     void update(const QString &text);
-    void onKeyPressed(const int &key, const QString &value);
 
 protected:
     void resizeEvent(QResizeEvent *e);
@@ -37,6 +36,7 @@ private:
     QHBoxLayout *h2();
     QHBoxLayout *h3();
     QHBoxLayout *h4();
+    QHBoxLayout *h5();
     void resizeButton();
 };
 

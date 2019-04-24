@@ -1,5 +1,5 @@
 #/**********************************************************
-#Author: å¾®ä¿¡å…¬ä¼—å·(ä½ æ‰å°å­¦ç”Ÿ)
+#Author: Î¢ĞÅ¹«ÖÚºÅÄã²ÅĞ¡Ñ§Éú
 #WeChat public platform: nicaixiaoxuesheng
 #Email:  2088201923@qq.com
 #**********************************************************/
@@ -18,16 +18,16 @@ TARGET = QtKeyboard
 TEMPLATE = app
 QMAKE_CXXFLAGS += -std=c++0x
 
+win32: RC_ICONS += app.ico
+
 SOURCES += main.cpp \
     KeyButton.cpp \
-    Keyboard.cpp \
-    KeyboardManager.cpp
+    Keyboard.cpp
 
 HEADERS  += \
     AbstractKeyboard.h \
     KeyButton.h \
-    Keyboard.h \
-    KeyboardManager.h
+    Keyboard.h
 
 RESOURCES += \
     Resources.qrc
