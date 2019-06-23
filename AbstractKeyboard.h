@@ -1,7 +1,9 @@
-/**********************************************************
-Author: 微信公众号(你才小学生)
-WeChat public platform: nicaixiaoxuesheng
-Email:  2088201923@qq.com
+﻿/**********************************************************
+Author: Qt君
+微信公众号: Qt君(首发)
+QQ群: 732271126
+Email: 2088201923@qq.com
+LICENSE: MIT
 **********************************************************/
 
 #ifndef AEA_ABSTRACT_KEYBOARD_H
@@ -29,18 +31,15 @@ public:
 public slots:
     virtual void update(const QString &text) { Q_UNUSED(text); }
     void onKeyPressed(int key, QString value) {
-qDebug()<<"key: "<<key<<"value: "<<value;
-QWidget *receiver = QApplication::focusWidget();
-if (!receiver)
-    return;
+        QWidget *receiver = QApplication::focusWidget();
+        if (!receiver)
+            return;
 
-qDebug()<<"Send key event "<<key<<" to focus widget "<<receiver->objectName();
+        QKeyEvent keyPress(QEvent::KeyPress,     key, Qt::NoModifier, value);
+        QKeyEvent keyRelease(QEvent::KeyRelease, key, Qt::NoModifier, value);
 
-QKeyEvent keyPress(QEvent::KeyPress,     key, Qt::NoModifier, value);
-QKeyEvent keyRelease(QEvent::KeyRelease, key, Qt::NoModifier, value);
-
-QApplication::sendEvent(receiver, &keyPress);
-QApplication::sendEvent(receiver, &keyRelease);
+        QApplication::sendEvent(receiver, &keyPress);
+        QApplication::sendEvent(receiver, &keyRelease);
     }
 
 signals:
