@@ -134,6 +134,7 @@ KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
 
 QHBoxLayout *Keyboard::h1()
 {
+    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
     h->setSpacing(BUTTON_SPACING_RATIO*height());
     for (int i = 0; i < modeListBar1.count(); i++) {
@@ -141,11 +142,15 @@ QHBoxLayout *Keyboard::h1()
         h->addWidget(button);
     }
 
-    return h;
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
 }
 
 QHBoxLayout *Keyboard::h2()
 {
+    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
     h->setSpacing(BUTTON_SPACING_RATIO*height());
     for (int i = 0; i < modeListBar2.count(); i++) {
@@ -153,11 +158,15 @@ QHBoxLayout *Keyboard::h2()
         h->addWidget(button);
     }
 
-    return h;
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
 }
 
 QHBoxLayout *Keyboard::h3()
 {
+    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
     h->setSpacing(BUTTON_SPACING_RATIO*height());
     for (int i = 0; i < modeListBar3.count(); i++) {
@@ -165,11 +174,15 @@ QHBoxLayout *Keyboard::h3()
         h->addWidget(button);
     }
 
-    return h;
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
 }
 
 QHBoxLayout *Keyboard::h4()
 {
+    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
     h->setSpacing(BUTTON_SPACING_RATIO*height());
     for (int i = 0; i < modeListBar4.count(); i++) {
@@ -177,7 +190,10 @@ QHBoxLayout *Keyboard::h4()
         h->addWidget(button);
     }
 
-    return h;
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
 }
 
 void Keyboard::resizeButton()

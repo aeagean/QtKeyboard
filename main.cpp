@@ -9,7 +9,6 @@ LICENSE: MIT
 
 #include <QApplication>
 #include <QLineEdit>
-#include <QDebug>
 
 using namespace AeaQt;
 
@@ -17,11 +16,16 @@ int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
 
+    QWidget window;
     Keyboard keyboard;
-    keyboard.show();
+    QLineEdit textInput;
 
-    QLineEdit *textInput = new QLineEdit(&keyboard);
-    textInput->show();
+    QVBoxLayout *v = new QVBoxLayout;
+    v->addWidget(&textInput);
+    v->addWidget(&keyboard);
+
+    window.setLayout(v);
+    window.show();
 
     return a.exec();
 }

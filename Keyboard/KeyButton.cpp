@@ -11,7 +11,7 @@ LICENSE: MIT
 
 using namespace AeaQt;
 
-const QString defaultStyleSheet = "AeaQt--KeyButton { background: #4395ff; border-radius: 5px;" \
+const QString DEFAULT_STYLE_SHEET = "AeaQt--KeyButton { background: #4395ff; border-radius: 5px;" \
                                   "font-size: 26px; color: white;}" \
                                   "AeaQt--KeyButton:pressed { background: #01ddfd }";
 
@@ -63,7 +63,7 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
 {
     Q_ASSERT(!modes.isEmpty());
     this->setFocusPolicy(Qt::NoFocus);
-    this->setStyleSheet(defaultStyleSheet);
+    this->setStyleSheet(DEFAULT_STYLE_SHEET);
 
     foreach (Mode mode, modes) {
         if (mode.type == Auto) {
