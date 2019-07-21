@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ChineseLib/PinYin</file>
+        <file>Image/backspace.png</file>
+        <file>Image/enter.png</file>
+        <file>Image/space.png</file>
+        <file>Image/caplock.png</file>
+    </qresource>
+</RCC>

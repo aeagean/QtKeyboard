@@ -12,7 +12,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -22,14 +22,16 @@ QMAKE_CXXFLAGS += -std=c++0x
 
 win32: RC_ICONS += app.ico
 
+INCLUDEPATH = Keyboard
+
 SOURCES += main.cpp \
-    KeyButton.cpp \
-    Keyboard.cpp
+    Keyboard/KeyButton.cpp \
+    Keyboard/Keyboard.cpp
 
 HEADERS  += \
-    AbstractKeyboard.h \
-    KeyButton.h \
-    Keyboard.h
+    Keyboard/AbstractKeyboard.h \
+    Keyboard/KeyButton.h \
+    Keyboard/Keyboard.h
 
 RESOURCES += \
-    Resources.qrc
+    Resources/Resources.qrc

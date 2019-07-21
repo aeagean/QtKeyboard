@@ -10,12 +10,15 @@ LICENSE: MIT
 #include <QVBoxLayout>
 #include <QApplication>
 #include <QDebug>
-#include <QLineEdit>
 
 using namespace AeaQt;
 
-const int defaultButtonWidth = 55;
-const int defaultButtonHeight = 45;
+const int normalButtonWidth = 55;
+const int normalButtonHeight = 45;
+const QString BACKSPACE_ICON = ":/Image/backspace.png";
+const QString ENTER_ICON     = ":/Image/enter.png";
+const QString SPACE_ICON     = ":/Image/space.png";
+const QString CAPLOCK_ICON   = ":/Image/caplock.png";
 
 typedef QList<KeyButton::Mode> Modes;
 typedef QList<Modes> ModesList;
@@ -50,7 +53,7 @@ const QList<Modes> modeListBar2 = {
 };
 
 const QList<Modes> modeListBar3 = {
-    {{Qt::Key_CapsLock, "", "切换"}},
+    {{Qt::Key_CapsLock, "", ""/*大小写切换*/}},
     {{Qt::Key_Z, "z"}, {Qt::Key_Z, "Z"}, {Qt::Key_ParenLeft, "("}},
     {{Qt::Key_X, "x"}, {Qt::Key_X, "X"}, {Qt::Key_ParenLeft, ")"}},
     {{Qt::Key_C, "c"}, {Qt::Key_C, "C"}, {Qt::Key_Minus, "-"}},
@@ -58,14 +61,14 @@ const QList<Modes> modeListBar3 = {
     {{Qt::Key_B, "b"}, {Qt::Key_B, "B"}, {Qt::Key_unknown, ":"}},
     {{Qt::Key_N, "n"}, {Qt::Key_N, "N"}, {Qt::Key_Semicolon, ";"}},
     {{Qt::Key_M, "m"}, {Qt::Key_M, "M"}, {Qt::Key_Slash, "/"}},
-    {{Qt::Key_Backspace, "", "退格"}}
+    {{Qt::Key_Backspace, "", ""/*退格*/}}
 };
 
 const QList<Modes> modeListBar4 = {
     {{Qt::Key_Mode_switch, "", "?123"}},
     {{Qt::Key_Context1, "", "中"}, {Qt::Key_Context1, "", "En"}},
-    {{Qt::Key_Space,  " ", "空格"}},
-    {{Qt::Key_Enter,  "", "回车"}}
+    {{Qt::Key_Space,  " ", ""/*空格*/}},
+    {{Qt::Key_Enter,  "", ""/*换行*/}}
 };
 
 const QList<ModesList> modesListBar = { modeListBar1, modeListBar2, modeListBar3, modeListBar4 };
@@ -75,9 +78,6 @@ Keyboard::Keyboard(QWidget *parent) :
 {
     setFixedSize(850, 320);
     resizeButton();
-
-    QLineEdit *textInput = new QLineEdit(this);
-    textInput->show();
 
     QVBoxLayout *mainLayout = new QVBoxLayout(this);
 
@@ -123,9 +123,10 @@ void Keyboard::switchEnOrCh()
 {
     QList<KeyButton *> buttons = findChildren<KeyButton *>();
     foreach(KeyButton *button, buttons) {
-        if (button->mode().key == Qt::Key_Context1)
+        if (button->mode().key == Qt::Key_Context1) {
             button->switching();
-        button->switchCapsLock();
+            // todo
+        }
     }
 }
 
@@ -141,15 +142,16 @@ QHBoxLayout *Keyboard::h1()
 {
     QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
     for (int i = 0; i < modeListBar1.count(); i++) {
         KeyButton *button = createButton(modeListBar1.at(i));
         h->addWidget(button);
     }
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
+    h->setSpacing(BUTTON_SPACING_RATIO*height());
+
+//    main->addStretch();
+//    main->addLayout(h);
+//    main->addStretch();
+    return h;
 }
 
 QHBoxLayout *Keyboard::h2()
@@ -198,31 +200,21 @@ QHBoxLayout *Keyboard::h4()
     return main;
 }
 
-QHBoxLayout *Keyboard::h5()
-{
-    QHBoxLayout *main = new QHBoxLayout;
-    QHBoxLayout *h = new QHBoxLayout;
-    QLineEdit *textInput = new QLineEdit;
-    textInput->setObjectName("dddd");
-    h->addWidget(textInput);
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
-}
-
 void Keyboard::resizeButton()
 {
     foreach (KeyButton *button, findChildren<KeyButton *>()) {
         int fixedWidth = width()*BUTTON_WIDTH_RATIO;
         int fixedHeight = height()*BUTTON_HEIGHT_RATIO;
+        button->setIconSize(QSize(2*fixedWidth/3, 2*fixedHeight/3));
 
         switch (button->mode().key) {
         case Qt::Key_Backspace:
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.5 + height()*BUTTON_SPACING_RATIO/2;
+            button->setIcon(QIcon(BACKSPACE_ICON));
+            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.1 + height()*BUTTON_SPACING_RATIO/2;
             break;
         case Qt::Key_CapsLock:
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.5 + height()*BUTTON_SPACING_RATIO/2;
+            button->setIcon(QIcon(CAPLOCK_ICON));
+            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.1 + height()*BUTTON_SPACING_RATIO/2;
             connect(button, SIGNAL(pressed()), this, SLOT(switchCapsLock()), Qt::UniqueConnection);
             break;
         case Qt::Key_Mode_switch:
@@ -233,10 +225,12 @@ void Keyboard::resizeButton()
             connect(button, SIGNAL(pressed()), this, SLOT(switchEnOrCh()), Qt::UniqueConnection);
             break;
         case Qt::Key_Enter:
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.5 + height()*BUTTON_SPACING_RATIO/2;
+            button->setIcon(QIcon(ENTER_ICON));
+            fixedWidth = width()*BUTTON_WIDTH_RATIO*2.6 + height()*BUTTON_SPACING_RATIO/2;
             break;
         case Qt::Key_Space:
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*6.5;
+            button->setIcon(QIcon(SPACE_ICON));
+            fixedWidth = width()*BUTTON_WIDTH_RATIO*5;
             break;
         default:
             break;

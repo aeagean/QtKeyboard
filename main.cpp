@@ -5,9 +5,10 @@ QQ群: 732271126
 Email: 2088201923@qq.com
 LICENSE: MIT
 **********************************************************/
+#include "Keyboard.h"
 
 #include <QApplication>
-#include "Keyboard.h"
+#include <QLineEdit>
 #include <QDebug>
 
 using namespace AeaQt;
@@ -18,6 +19,9 @@ int main(int argc, char *argv[])
 
     Keyboard keyboard;
     keyboard.show();
+
+    QLineEdit *textInput = new QLineEdit();
+    textInput->show();
 
     return a.exec();
 }
