@@ -21,9 +21,6 @@ class Keyboard : public AbstractKeyboard
 public:
     Keyboard(QWidget *parent = NULL);
 
-public slots:
-    void update(const QString &text);
-
 protected:
     void resizeEvent(QResizeEvent *e);
 

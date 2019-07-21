@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
     Keyboard keyboard;
     keyboard.show();
 
-    QLineEdit *textInput = new QLineEdit();
+    QLineEdit *textInput = new QLineEdit(&keyboard);
     textInput->show();
 
     return a.exec();
