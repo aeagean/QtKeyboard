@@ -35,6 +35,8 @@ private:
     QHBoxLayout *h2();
     QHBoxLayout *h3();
     QHBoxLayout *h4();
+    QHBoxLayout *candidateList();
+
     void resizeButton();
 };
 

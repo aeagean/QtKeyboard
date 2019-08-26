@@ -9,6 +9,8 @@ LICENSE: MIT
 #include "Keyboard.h"
 #include <QVBoxLayout>
 #include <QApplication>
+#include <QListWidget>
+#include <QScroller>
 #include <QDebug>
 
 using namespace AeaQt;
@@ -82,6 +84,7 @@ Keyboard::Keyboard(QWidget *parent) :
 
     QVBoxLayout *layout = new QVBoxLayout();
     layout->setSpacing(BUTTON_SPACING_RATIO*height());
+    layout->addLayout(candidateList());
     layout->addLayout(h1());
     layout->addLayout(h2());
     layout->addLayout(h3());
@@ -189,6 +192,58 @@ QHBoxLayout *Keyboard::h4()
         KeyButton *button = createButton(modeListBar4.at(i));
         h->addWidget(button);
     }
+
+    main->addStretch();
+    main->addLayout(h);
+    main->addStretch();
+    return main;
+}
+
+QHBoxLayout *Keyboard::candidateList()
+{
+    QHBoxLayout *main = new QHBoxLayout;
+    QHBoxLayout *h = new QHBoxLayout;
+    h->setSpacing(BUTTON_SPACING_RATIO*height());
+
+    QListWidget *view = new QListWidget;
+    view->resize(QSize(350, 50));
+
+    /* 设置为列表显示模式 */
+    view->setViewMode(QListView::ListMode);
+
+    /* 从左往右排列 */
+    view->setFlow(QListView::LeftToRight);
+
+    /* 屏蔽水平滑动条 */
+    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    /* 屏蔽垂直滑动条 */
+    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    /* 设置为像素滚动 */
+    view->setHorizontalScrollMode(QListWidget::ScrollPerPixel);
+
+    /* 设置鼠标左键拖动 */
+    QScroller::grabGesture(view,QScroller::LeftMouseButtonGesture);
+
+    /* 装载数据 */
+    for (int i = 0; i < 15; i++) {
+        QListWidgetItem *item = new QListWidgetItem(QString::number(i));
+        /* 设置文字居中 */
+        item->setTextAlignment(Qt::AlignCenter);
+        view->addItem(item);
+    }
+
+    /* 设置样式 */
+    view->setStyleSheet(R"(
+        QListWidget { outline: none; border:1px solid gray; color: black; }
+        QListWidget::Item { width: 50px; height: 50px; }
+        QListWidget::Item:hover { background: #4CAF50; color: white; }
+        QListWidget::item:selected { background: #e7e7e7; color: #f44336; }
+        QListWidget::item:selected:!active { background: lightgreen; }
+                        )");
+
+    h->addWidget(view);
 
     main->addStretch();
     main->addLayout(h);
