@@ -30,7 +30,10 @@ public:
 
 public slots:
     virtual void update(const QString &text) { Q_UNUSED(text); }
-    void onKeyPressed(int key, QString value) {
+
+    void onKeyPressed(int key, QString value)
+    {
+        qDebug() << "key: " << key << "Value: " << value;
         QWidget *receiver = QApplication::focusWidget();
         if (!receiver)
             return;

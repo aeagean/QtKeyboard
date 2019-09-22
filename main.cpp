@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
 
     QWidget window;
     Keyboard keyboard;
-    QLineEdit textInput;
+    QLineEdit textInput(&keyboard);
 
     QVBoxLayout *v = new QVBoxLayout;
     v->addWidget(&textInput);

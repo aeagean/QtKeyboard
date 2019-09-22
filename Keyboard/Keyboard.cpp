@@ -9,8 +9,8 @@ LICENSE: MIT
 #include "Keyboard.h"
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QListWidget>
 #include <QScroller>
+#include <QRegExp>
 #include <QDebug>
 
 using namespace AeaQt;
@@ -69,14 +69,16 @@ const QList<Modes> modeListBar3 = {
 
 const QList<Modes> modeListBar4 = {
     {{Qt::Key_Mode_switch, "",  "?123"}},
-    {{Qt::Key_Context1,    "",  "中"},    {Qt::Key_Context1, "", "En"}},
+    {{Qt::Key_Context1,    "",  "En"},    {Qt::Key_Context1, "", "中"}},
     {{Qt::Key_Space,       " ", ""/*空格*/}},
     {{Qt::Key_Enter,       "",  ""/*换行*/}}
 };
 
 Keyboard::Keyboard(QWidget *parent) :
-    AbstractKeyboard(parent)
+    AbstractKeyboard(parent),
+    m_isChinese(false)
 {
+    m_chineseWidget = new ChineseWidget(this);
     setFixedSize(850, 320);
     resizeButton();
 
@@ -95,6 +97,11 @@ Keyboard::Keyboard(QWidget *parent) :
     mainLayout->addStretch();
 
     setLayout(mainLayout);
+
+    connect(m_chineseWidget, SIGNAL(pressedChanged(const int &, const QString &)),
+            this, SLOT(onKeyPressed(const int &, const QString &)));
+
+    connect(m_chineseWidget, SIGNAL(pressedChanged(const int &, const QString &)), this, SLOT(clearBufferText()));
 }
 
 void Keyboard::resizeEvent(QResizeEvent *e)
@@ -118,19 +125,46 @@ void Keyboard::switchSpecialChar()
 
 void Keyboard::switchEnOrCh()
 {
+    m_isChinese = !m_isChinese;
     QList<KeyButton *> buttons = findChildren<KeyButton *>();
     foreach(KeyButton *button, buttons) {
         if (button->mode().key == Qt::Key_Context1) {
             button->switching();
-            // todo
         }
     }
+}
+
+void Keyboard::onButtonPressed(const int &code, const QString &text)
+{
+
+    if (! m_isChinese) {
+        onKeyPressed(code, text);
+        m_bufferText.clear();
+        return;
+    }
+
+    QRegExp rx("[a-zA-Z]");
+    if (!rx.exactMatch(text) && m_bufferText.isEmpty()) {
+        onKeyPressed(code, text);
+        return;
+    }
+
+    if (code == Qt::Key_Backspace)
+        m_bufferText.chop(1);
+    else
+        m_bufferText.append(text);
+    m_chineseWidget->setText(m_bufferText);
+}
+
+void Keyboard::clearBufferText()
+{
+    m_bufferText.clear();
 }
 
 KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
 {
     KeyButton *button = new KeyButton(modes, this);
-    button->onReponse(this, SLOT(onKeyPressed(const int&, const QString&)));
+    button->onReponse(this, SLOT(onButtonPressed(const int&, const QString&)));
     button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     return button;
 }
@@ -203,51 +237,13 @@ QHBoxLayout *Keyboard::candidateList()
 {
     QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
+//    h->setSpacing(BUTTON_SPACING_RATIO*height());
 
-    QListWidget *view = new QListWidget;
-    view->resize(QSize(350, 50));
+    h->addWidget(m_chineseWidget);
 
-    /* 设置为列表显示模式 */
-    view->setViewMode(QListView::ListMode);
-
-    /* 从左往右排列 */
-    view->setFlow(QListView::LeftToRight);
-
-    /* 屏蔽水平滑动条 */
-    view->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    /* 屏蔽垂直滑动条 */
-    view->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-
-    /* 设置为像素滚动 */
-    view->setHorizontalScrollMode(QListWidget::ScrollPerPixel);
-
-    /* 设置鼠标左键拖动 */
-    QScroller::grabGesture(view,QScroller::LeftMouseButtonGesture);
-
-    /* 装载数据 */
-    for (int i = 0; i < 15; i++) {
-        QListWidgetItem *item = new QListWidgetItem(QString::number(i));
-        /* 设置文字居中 */
-        item->setTextAlignment(Qt::AlignCenter);
-        view->addItem(item);
-    }
-
-    /* 设置样式 */
-    view->setStyleSheet(R"(
-        QListWidget { outline: none; border:1px solid gray; color: black; }
-        QListWidget::Item { width: 50px; height: 50px; }
-        QListWidget::Item:hover { background: #4CAF50; color: white; }
-        QListWidget::item:selected { background: #e7e7e7; color: #f44336; }
-        QListWidget::item:selected:!active { background: lightgreen; }
-                        )");
-
-    h->addWidget(view);
-
-    main->addStretch();
+//    main->addStretch();
     main->addLayout(h);
-    main->addStretch();
+//    main->addStretch();
     return main;
 }
 
@@ -288,5 +284,104 @@ void Keyboard::resizeButton()
         }
 
         button->setFixedSize(fixedWidth, fixedHeight);
+    }
+}
+
+ChineseWidget::ChineseWidget(QWidget *parent) :
+    QListWidget(parent)
+{
+    loadData();
+
+    setFocusPolicy(Qt::NoFocus);
+    /* 设置为列表显示模式 */
+    setViewMode(QListView::ListMode);
+
+    /* 从左往右排列 */
+    setFlow(QListView::LeftToRight);
+
+    /* 屏蔽水平滑动条 */
+    setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    /* 屏蔽垂直滑动条 */
+    setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+
+    /* 设置为像素滚动 */
+    setHorizontalScrollMode(QListWidget::ScrollPerPixel);
+
+    /* 设置鼠标左键拖动 */
+    QScroller::grabGesture(this, QScroller::LeftMouseButtonGesture);
+
+    /* 设置样式 */
+    setStyleSheet(R"(
+                    QListWidget { outline: none; border:1px solid gray; color: black; }
+                    QListWidget::Item { width: 50px; height: 50px; }
+                    QListWidget::Item:hover { background: #4CAF50; color: white; }
+                    QListWidget::item:selected { background: #4CAF50; color: black; }
+                    QListWidget::item:selected:!active { background: #00000000; color: black; }
+                  )");
+
+    connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemClicked(QListWidgetItem *)));
+}
+
+void ChineseWidget::setText(const QString &text)
+{
+    for (int i = 0; i < count(); i++) {
+        QListWidgetItem *item = takeItem(i);
+        delete item;
+        item = NULL;
+    }
+
+    clear();
+
+    if (! m_data.contains(text.left(1))) {
+        return;
+    }
+
+    addOneItem(text);
+
+    const QList<QPair<QString, QString>> &tmp = m_data[text.left(1)];
+    for (const QPair<QString, QString> &each : tmp) {
+        if (each.first != text)
+            continue;
+
+        addOneItem(each.second);
+    }
+}
+
+void ChineseWidget::onItemClicked(QListWidgetItem *item)
+{
+    emit pressedChanged(-1, item->text());
+    setText("");
+}
+
+void ChineseWidget::addOneItem(const QString &text)
+{
+    QListWidgetItem *item = new QListWidgetItem(text, this);
+    /* 设置文字居中 */
+    item->setTextAlignment(Qt::AlignCenter);
+    addItem(item);
+}
+
+void ChineseWidget::loadData()
+{
+    QFile pinyin(":/ChineseLib/PinYin");
+    if (! pinyin.open(QIODevice::ReadOnly)) {
+        qDebug() << "Open pinyin file failed!";
+        return;
+    }
+
+    while (! pinyin.atEnd()) {
+        QString buf = QString::fromUtf8(pinyin.readLine()).trimmed();
+        QRegExp regExp("^[\u4E00-\u9FA5]+");
+
+        int index = regExp.indexIn(buf);
+        if (index == -1)
+            continue;
+
+        QString first = buf.right(buf.size() - regExp.matchedLength());
+        QString second = buf.mid(index, regExp.matchedLength());
+
+        QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
+        tmp.append(qMakePair(first, second));
     }
 }
