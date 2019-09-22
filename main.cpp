@@ -17,12 +17,24 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QWidget window;
+    window.resize(850, 350);
     Keyboard keyboard;
+    keyboard.show();
     QLineEdit textInput(&keyboard);
+    textInput.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    textInput.setStyleSheet(R"(
+                            QLineEdit {
+                                border-style: none;
+                                padding: 3px;
+                                border-radius: 5px;
+                                border: 1px solid #dce5ec;
+                                font-size: 30px;
+                            }
+                            )");
 
     QVBoxLayout *v = new QVBoxLayout;
-    v->addWidget(&textInput);
-    v->addWidget(&keyboard);
+    v->addWidget(&textInput, 1);
+    v->addWidget(&keyboard, 5);
 
     window.setLayout(v);
     window.show();

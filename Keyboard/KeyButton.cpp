@@ -12,6 +12,7 @@ LICENSE: MIT
 using namespace AeaQt;
 
 const QString DEFAULT_STYLE_SHEET = "AeaQt--KeyButton { background: #4395ff; border-radius: 5px;" \
+                                  "margin: 5px;" \
                                   "font-size: 26px; color: white;}" \
                                   "AeaQt--KeyButton:pressed { background: #01ddfd }";
 

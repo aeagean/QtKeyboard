@@ -26,7 +26,7 @@ const QString ENTER_ICON     = ":/Image/enter.png";
 const QString SPACE_ICON     = ":/Image/space.png";
 const QString CAPLOCK_ICON   = ":/Image/caplock.png";
 
-const double BUTTON_SPACING_RATIO = 0.045;
+const double BUTTON_SPACING_RATIO = 0.030;
 const double BUTTON_WIDTH_RATIO   = 0.09;
 const double BUTTON_HEIGHT_RATIO  = 0.2;
 
@@ -79,24 +79,22 @@ Keyboard::Keyboard(QWidget *parent) :
     m_isChinese(false)
 {
     m_chineseWidget = new ChineseWidget(this);
-    setFixedSize(850, 320);
+    setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    resize(850, 320);
     resizeButton();
 
-    QVBoxLayout *mainLayout = new QVBoxLayout(this);
+    QVBoxLayout *layout = new QVBoxLayout(this);
+    layout->setSizeConstraint(QLayout::SetNoConstraint);
+    layout->setSpacing(0);
+    layout->setMargin(0);
 
-    QVBoxLayout *layout = new QVBoxLayout();
-    layout->setSpacing(BUTTON_SPACING_RATIO*height());
-    layout->addLayout(candidateList());
-    layout->addLayout(h1());
-    layout->addLayout(h2());
-    layout->addLayout(h3());
-    layout->addLayout(h4());
+    layout->addWidget(chineseBar(), 12);
+    layout->addLayout(h1(), 15);
+    layout->addLayout(h2(), 15);
+    layout->addLayout(h3(), 15);
+    layout->addLayout(h4(), 15);
 
-    mainLayout->addStretch();
-    mainLayout->addLayout(layout);
-    mainLayout->addStretch();
-
-    setLayout(mainLayout);
+    setLayout(layout);
 
     connect(m_chineseWidget, SIGNAL(pressedChanged(const int &, const QString &)),
             this, SLOT(onKeyPressed(const int &, const QString &)));
@@ -165,86 +163,95 @@ KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
 {
     KeyButton *button = new KeyButton(modes, this);
     button->onReponse(this, SLOT(onButtonPressed(const int&, const QString&)));
-    button->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+    button->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
     return button;
+}
+
+QWidget *Keyboard::createBar(const QList<QList<KeyButton::Mode>> &modes)
+{
+    QWidget *widget = new QWidget;
+
+    QHBoxLayout *h = new QHBoxLayout;
+    for (int i = 0; i < modes.count(); i++) {
+        KeyButton *button = createButton(modes.at(i));
+        h->addWidget(button);
+    }
+
+    widget->setLayout(h);
+    return widget;
+}
+
+QWidget *Keyboard::chineseBar()
+{
+    m_chineseWidget->setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
+    return m_chineseWidget;
 }
 
 QHBoxLayout *Keyboard::h1()
 {
-    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
+    h->setSizeConstraint(QLayout::SetNoConstraint);
     for (int i = 0; i < modeListBar1.count(); i++) {
         KeyButton *button = createButton(modeListBar1.at(i));
         h->addWidget(button);
     }
 
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
+    return h;
 }
 
 QHBoxLayout *Keyboard::h2()
 {
-    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
+    h->addSpacing(20);
     for (int i = 0; i < modeListBar2.count(); i++) {
         KeyButton *button = createButton(modeListBar2.at(i));
         h->addWidget(button);
     }
+    h->addSpacing(20);
 
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
+    return h;
 }
 
 QHBoxLayout *Keyboard::h3()
 {
-    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
+    h->setSpacing(0);
     for (int i = 0; i < modeListBar3.count(); i++) {
         KeyButton *button = createButton(modeListBar3.at(i));
-        h->addWidget(button);
+        if (i == 0 || i == (modeListBar3.count() - 1))
+            h->addWidget(button, 70);
+        else
+            h->addWidget(button, 69);
     }
 
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
+    return h;
 }
 
 QHBoxLayout *Keyboard::h4()
 {
-    QHBoxLayout *main = new QHBoxLayout;
     QHBoxLayout *h = new QHBoxLayout;
-    h->setSpacing(BUTTON_SPACING_RATIO*height());
+    h->setSpacing(0);
     for (int i = 0; i < modeListBar4.count(); i++) {
         KeyButton *button = createButton(modeListBar4.at(i));
-        h->addWidget(button);
+        if (i == 0)
+            h->addWidget(button, 12);
+
+        if (i == 1)
+            h->addWidget(button, 10);
+
+        if (i == 2)
+            h->addWidget(button, 56);
+
+        if (i == 3)
+            h->addWidget(button, 22);
     }
 
-    main->addStretch();
-    main->addLayout(h);
-    main->addStretch();
-    return main;
+    return h;
 }
 
-QHBoxLayout *Keyboard::candidateList()
+QWidget *Keyboard::candidateList()
 {
-    QHBoxLayout *main = new QHBoxLayout;
-    QHBoxLayout *h = new QHBoxLayout;
-//    h->setSpacing(BUTTON_SPACING_RATIO*height());
-
-    h->addWidget(m_chineseWidget);
-
-//    main->addStretch();
-    main->addLayout(h);
-//    main->addStretch();
-    return main;
+    return m_chineseWidget;
 }
 
 void Keyboard::resizeButton()
@@ -257,15 +264,12 @@ void Keyboard::resizeButton()
         switch (button->mode().key) {
         case Qt::Key_Backspace:
             button->setIcon(QIcon(BACKSPACE_ICON));
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.1 + height()*BUTTON_SPACING_RATIO/2;
             break;
         case Qt::Key_CapsLock:
             button->setIcon(QIcon(CAPLOCK_ICON));
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.1 + height()*BUTTON_SPACING_RATIO/2;
             connect(button, SIGNAL(pressed()), this, SLOT(switchCapsLock()), Qt::UniqueConnection);
             break;
         case Qt::Key_Mode_switch:
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*1.5 + height()*BUTTON_SPACING_RATIO/2;
             connect(button, SIGNAL(pressed()), this, SLOT(switchSpecialChar()), Qt::UniqueConnection);
             break;
         case Qt::Key_Context1:
@@ -273,17 +277,13 @@ void Keyboard::resizeButton()
             break;
         case Qt::Key_Enter:
             button->setIcon(QIcon(ENTER_ICON));
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*2.6 + height()*BUTTON_SPACING_RATIO/2;
             break;
         case Qt::Key_Space:
             button->setIcon(QIcon(SPACE_ICON));
-            fixedWidth = width()*BUTTON_WIDTH_RATIO*5;
             break;
         default:
             break;
         }
-
-        button->setFixedSize(fixedWidth, fixedHeight);
     }
 }
 
@@ -313,10 +313,10 @@ ChineseWidget::ChineseWidget(QWidget *parent) :
 
     /* 设置样式 */
     setStyleSheet(R"(
-                    QListWidget { outline: none; border:1px solid gray; color: black; }
+                    QListWidget { outline: none; border:1px solid #00000000; color: black; }
                     QListWidget::Item { width: 50px; height: 50px; }
-                    QListWidget::Item:hover { background: #4CAF50; color: white; }
-                    QListWidget::item:selected { background: #4CAF50; color: black; }
+                    QListWidget::Item:hover { background: #4395ff; color: white; }
+                    QListWidget::item:selected { background: #4395ff; color: black; }
                     QListWidget::item:selected:!active { background: #00000000; color: black; }
                   )");
 
@@ -333,11 +333,11 @@ void ChineseWidget::setText(const QString &text)
 
     clear();
 
+    addOneItem(text);
+
     if (! m_data.contains(text.left(1))) {
         return;
     }
-
-    addOneItem(text);
 
     const QList<QPair<QString, QString>> &tmp = m_data[text.left(1)];
     for (const QPair<QString, QString> &each : tmp) {
@@ -357,6 +357,12 @@ void ChineseWidget::onItemClicked(QListWidgetItem *item)
 void ChineseWidget::addOneItem(const QString &text)
 {
     QListWidgetItem *item = new QListWidgetItem(text, this);
+    QFont font;
+    font.setPointSize(18);
+    font.setBold(true);
+    font.setWeight(50);
+    item->setFont(font);
+
     /* 设置文字居中 */
     item->setTextAlignment(Qt::AlignCenter);
     addItem(item);

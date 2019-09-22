@@ -57,11 +57,14 @@ private slots:
 
 private:
     KeyButton *createButton(QList<KeyButton::Mode> modes);
+
+    QWidget *createBar(const QList<QList<KeyButton::Mode>> &modes);
+    QWidget *chineseBar();
     QHBoxLayout *h1();
     QHBoxLayout *h2();
     QHBoxLayout *h3();
     QHBoxLayout *h4();
-    QHBoxLayout *candidateList();
+    QWidget *candidateList();
 
     void resizeButton();
 
