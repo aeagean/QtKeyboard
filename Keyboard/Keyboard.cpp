@@ -340,11 +340,14 @@ void ChineseWidget::setText(const QString &text)
         return;
     }
 
+    /* 通过获取首字母索引词库内容，用于加快匹配词(组)。 */
     const QList<QPair<QString, QString>> &tmp = m_data[text.left(1)];
     for (const QPair<QString, QString> &each : tmp) {
+        /* 模糊匹配 */
         if (each.first.left(text.count()) != text)
             continue;
 
+        /* 添加到候选栏 */
         addOneItem(each.second);
     }
 }
@@ -404,34 +407,41 @@ void ChineseWidget::loadData()
 
 void ChineseWidget::loadData2()
 {
+    /* 加载词组字库内容 */
     QFile pinyin(":/ChineseLib/pinyin_phrase.txt");
     if (! pinyin.open(QIODevice::ReadOnly)) {
         qDebug() << "Open pinyin file failed!";
         return;
     }
 
+    /* 按行读取内容 */
     while (! pinyin.atEnd()) {
         QString buf = QString::fromUtf8(pinyin.readLine()).trimmed();
         if (buf.isEmpty())
             continue;
 
+        /* 去除#号后的注释内容 */
         if (buf.left(1) == "#")
             continue;
 
+        /* 正则匹配词组内容并通过组捕获获取'词组'和'拼音' */
         QRegExp regExp("(\\S+): ([\\S ]+)");
         int pos = 0;
         while ((pos = regExp.indexIn(buf, pos)) != -1) {
             pos += regExp.matchedLength();
-            QString second = regExp.cap(1);  // phrase
-            QString first = regExp.cap(2); // pinyin(s)
+            QString second = regExp.cap(1);  /* 词组 */
+            QString first = regExp.cap(2); /* 拼音 */
 
             QStringList strList = first.split(" ");
             QString abb;
             for (int i = 0; i < strList.count(); i++) {
-               abb += strList.at(i).left(1);
+                /* 获得拼音词组的首字母(用于缩写匹配) */
+                abb += strList.at(i).left(1);
             }
             QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
+            /* 将'拼音(缩写)'和'词组'写入匹配容器 */
             tmp.append(qMakePair(abb, second));
+            /* 将'拼音(全拼)'和'词组'写入匹配容器 */
             tmp.append(qMakePair(first.remove(" "), second));
         }
     }
