@@ -342,7 +342,7 @@ void ChineseWidget::setText(const QString &text)
 
     const QList<QPair<QString, QString>> &tmp = m_data[text.left(1)];
     for (const QPair<QString, QString> &each : tmp) {
-        if (each.first != text)
+        if (each.first.left(text.count()) != text)
             continue;
 
         addOneItem(each.second);
@@ -366,6 +366,15 @@ void ChineseWidget::addOneItem(const QString &text)
 
     /* 设置文字居中 */
     item->setTextAlignment(Qt::AlignCenter);
+    bool isChinese = QRegExp("^[\u4E00-\u9FA5]+").indexIn(text.left(1)) != -1;
+
+    int width = font.pointSize();
+    if (isChinese)
+        width += text.count()*font.pointSize()*1.5;
+    else
+        width += text.count()*font.pointSize()*2/3;
+
+    item->setSizeHint(QSize(width, 50));
     addItem(item);
 }
 
@@ -406,18 +415,24 @@ void ChineseWidget::loadData2()
         if (buf.isEmpty())
             continue;
 
-        if (buf.at(0) == "#")
+        if (buf.left(1) == "#")
             continue;
 
         QRegExp regExp("(\\S+): ([\\S ]+)");
         int pos = 0;
         while ((pos = regExp.indexIn(buf, pos)) != -1) {
             pos += regExp.matchedLength();
-
             QString second = regExp.cap(1);  // phrase
             QString first = regExp.cap(2); // pinyin(s)
+
+            QStringList strList = first.split(" ");
+            QString abb;
+            for (int i = 0; i < strList.count(); i++) {
+               abb += strList.at(i).left(1);
+            }
             QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
-            tmp.append(qMakePair(first, second.trimmed()));
+            tmp.append(qMakePair(abb, second));
+            tmp.append(qMakePair(first.remove(" "), second));
         }
     }
 }
