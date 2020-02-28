@@ -34,6 +34,7 @@ private slots:
 private:
     void addOneItem(const QString &text);
     void loadData();
+    void loadData2();
 
 private:
     QMap<QString, QList<QPair<QString, QString>> > m_data;

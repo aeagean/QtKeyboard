@@ -291,6 +291,7 @@ ChineseWidget::ChineseWidget(QWidget *parent) :
     QListWidget(parent)
 {
     loadData();
+    loadData2();
 
     setFocusPolicy(Qt::NoFocus);
     /* 设置为列表显示模式 */
@@ -370,7 +371,7 @@ void ChineseWidget::addOneItem(const QString &text)
 
 void ChineseWidget::loadData()
 {
-    QFile pinyin(":/ChineseLib/PinYin");
+    QFile pinyin(":/ChineseLib/pinyin.txt");
     if (! pinyin.open(QIODevice::ReadOnly)) {
         qDebug() << "Open pinyin file failed!";
         return;
@@ -389,5 +390,34 @@ void ChineseWidget::loadData()
 
         QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
         tmp.append(qMakePair(first, second));
+    }
+}
+
+void ChineseWidget::loadData2()
+{
+    QFile pinyin(":/ChineseLib/pinyin_phrase.txt");
+    if (! pinyin.open(QIODevice::ReadOnly)) {
+        qDebug() << "Open pinyin file failed!";
+        return;
+    }
+
+    while (! pinyin.atEnd()) {
+        QString buf = QString::fromUtf8(pinyin.readLine()).trimmed();
+        if (buf.isEmpty())
+            continue;
+
+        if (buf.at(0) == "#")
+            continue;
+
+        QRegExp regExp("(\\S+): ([\\S ]+)");
+        int pos = 0;
+        while ((pos = regExp.indexIn(buf, pos)) != -1) {
+            pos += regExp.matchedLength();
+
+            QString second = regExp.cap(1);  // phrase
+            QString first = regExp.cap(2); // pinyin(s)
+            QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
+            tmp.append(qMakePair(first, second.trimmed()));
+        }
     }
 }
