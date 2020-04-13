@@ -7,9 +7,14 @@ LICENSE: MIT
 **********************************************************/
 
 #include "Keyboard.h"
+#include "KeyButton.h"
 #include <QVBoxLayout>
 #include <QApplication>
-#include <QScroller>
+
+#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
+    #include <QScroller>
+#endif
+
 #include <QRegExp>
 #include <QDebug>
 
@@ -167,7 +172,7 @@ KeyButton *Keyboard::createButton(QList<KeyButton::Mode> modes)
     return button;
 }
 
-QWidget *Keyboard::createBar(const QList<QList<KeyButton::Mode>> &modes)
+QWidget *Keyboard::createBar(const QList<QList<KeyButton::Mode> > &modes)
 {
     QWidget *widget = new QWidget;
 
@@ -309,17 +314,19 @@ ChineseWidget::ChineseWidget(QWidget *parent) :
     /* 设置为像素滚动 */
     setHorizontalScrollMode(QListWidget::ScrollPerPixel);
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5,0,0))
     /* 设置鼠标左键拖动 */
     QScroller::grabGesture(this, QScroller::LeftMouseButtonGesture);
+#endif
 
     /* 设置样式 */
-    setStyleSheet(R"(
-                    QListWidget { outline: none; border:1px solid #00000000; color: black; }
-                    QListWidget::Item { width: 50px; height: 50px; }
-                    QListWidget::Item:hover { background: #4395ff; color: white; }
-                    QListWidget::item:selected { background: #4395ff; color: black; }
-                    QListWidget::item:selected:!active { background: #00000000; color: black; }
-                  )");
+    setStyleSheet("                                                                           \
+                  QListWidget { outline: none; border:1px solid #00000000; color: black; }    \
+                  QListWidget::Item { width: 50px; height: 50px; }                            \
+                  QListWidget::Item:hover { background: #4395ff; color: white; }              \
+                  QListWidget::item:selected { background: #4395ff; color: black; }           \
+                  QListWidget::item:selected:!active { background: #00000000; color: black; } \
+                  ");
 
     connect(this, SIGNAL(itemClicked(QListWidgetItem *)), this, SLOT(onItemClicked(QListWidgetItem *)));
 }
@@ -341,8 +348,9 @@ void ChineseWidget::setText(const QString &text)
     }
 
     /* 通过获取首字母索引词库内容，用于加快匹配词(组)。 */
-    const QList<QPair<QString, QString>> &tmp = m_data[text.left(1)];
-    for (const QPair<QString, QString> &each : tmp) {
+    const QList<QPair<QString, QString> > &tmp = m_data[text.left(1)];
+    for (int i = 0; i < tmp.count(); i++) {
+        const QPair<QString, QString> &each = tmp.at(i);
         /* 模糊匹配 */
         if (each.first.left(text.count()) != text)
             continue;
@@ -400,7 +408,7 @@ void ChineseWidget::loadData()
         QString first = buf.right(buf.size() - regExp.matchedLength());
         QString second = buf.mid(index, regExp.matchedLength());
 
-        QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
+        QList<QPair<QString, QString> > &tmp = m_data[first.left(1)];
         tmp.append(qMakePair(first, second));
     }
 }
@@ -438,7 +446,7 @@ void ChineseWidget::loadData2()
                 /* 获得拼音词组的首字母(用于缩写匹配) */
                 abb += strList.at(i).left(1);
             }
-            QList<QPair<QString, QString>> &tmp = m_data[first.left(1)];
+            QList<QPair<QString, QString> > &tmp = m_data[first.left(1)];
             /* 将'拼音(缩写)'和'词组'写入匹配容器 */
             tmp.append(qMakePair(abb, second));
             /* 将'拼音(全拼)'和'词组'写入匹配容器 */

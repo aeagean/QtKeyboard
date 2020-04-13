@@ -20,6 +20,15 @@ public:
     enum Type { Auto = 0, LowerCase, UpperCase, SpecialChar };
 
     struct Mode {
+        Mode() { }
+        Mode(int _key, QString _value, QString _display = QString(), Type _type = Auto)
+        {
+            key     = _key;
+            value   = _value;
+            display = _display;
+            type    = _type;
+        }
+
         int key;          /* Qt::Key */
         QString value;    /* text */
         QString display;  /* display text */

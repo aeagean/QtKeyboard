@@ -37,7 +37,7 @@ private:
     void loadData2();
 
 private:
-    QMap<QString, QList<QPair<QString, QString>> > m_data;
+    QMap<QString, QList<QPair<QString, QString> > > m_data;
 };
 
 class Keyboard : public AbstractKeyboard
@@ -59,7 +59,7 @@ private slots:
 private:
     KeyButton *createButton(QList<KeyButton::Mode> modes);
 
-    QWidget *createBar(const QList<QList<KeyButton::Mode>> &modes);
+    QWidget *createBar(const QList<QList<KeyButton::Mode> > &modes);
     QWidget *chineseBar();
     QHBoxLayout *h1();
     QHBoxLayout *h2();

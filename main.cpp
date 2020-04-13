@@ -23,15 +23,15 @@ int main(int argc, char *argv[])
     keyboard.show();
     QLineEdit textInput(&keyboard);
     textInput.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);
-    textInput.setStyleSheet(R"(
-                            QLineEdit {
-                                border-style: none;
-                                padding: 3px;
-                                border-radius: 5px;
-                                border: 1px solid #dce5ec;
-                                font-size: 30px;
-                            }
-                            )");
+    textInput.setStyleSheet("                              \
+                            QLineEdit {                    \
+                                border-style: none;        \
+                                padding: 3px;              \
+                                border-radius: 5px;        \
+                                border: 1px solid #dce5ec; \
+                                font-size: 30px;           \
+                            }                              \
+                            ");
 
     QVBoxLayout *v = new QVBoxLayout;
     v->addWidget(&textInput, 1);
