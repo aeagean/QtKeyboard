@@ -6,6 +6,7 @@ Email: 2088201923@qq.com
 LICENSE: MIT
 **********************************************************/
 #include "Keyboard.h"
+#include "NumberKeyboard.h"
 
 #include <QApplication>
 #include <QLineEdit>
@@ -19,7 +20,7 @@ int main(int argc, char *argv[])
     QWidget window;
     window.setWindowTitle("QtKeyboard by Qt君");
     window.resize(850, 370);
-    Keyboard keyboard;
+    NumberKeyboard keyboard;
     keyboard.show();
     QLineEdit textInput(&keyboard);
     textInput.setSizePolicy(QSizePolicy::Ignored, QSizePolicy::Ignored);

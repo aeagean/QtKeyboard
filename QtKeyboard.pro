@@ -1,6 +1,6 @@
 #/**********************************************************
-#Author: Qt¾ý
-#Î¢ÐÅ¹«ÖÚºÅ: Qt¾ý
+#Author: Qtï¿½ï¿½
+#Î¢ï¿½Å¹ï¿½ï¿½Úºï¿½: Qtï¿½ï¿½
 #QQÈº: 732271126
 #Email: 2088201923@qq.com
 #LICENSE: MIT
@@ -28,12 +28,14 @@ INCLUDEPATH = Keyboard
 
 SOURCES += main.cpp \
     Keyboard/KeyButton.cpp \
-    Keyboard/Keyboard.cpp
+    Keyboard/Keyboard.cpp \
+    Keyboard/NumberKeyboard.cpp
 
 HEADERS  += \
     Keyboard/AbstractKeyboard.h \
     Keyboard/KeyButton.h \
-    Keyboard/Keyboard.h
+    Keyboard/Keyboard.h \
+    Keyboard/NumberKeyboard.h
 
 RESOURCES += \
     Resources/Resources.qrc
