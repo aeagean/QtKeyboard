@@ -7,8 +7,11 @@ using namespace AeaQt;
 typedef QList<KeyButton::Mode> Modes;
 typedef QList<Modes> ModesList;
 
+static const QString s_backspace_icon = ":/Image/backspace.png";
+static const QString s_space_icon     = ":/Image/space.png";
+
 const QList<Modes> modeListBar1 = {
-    {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, "", "删除"}},
+    {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, ""}},
 };
 
 const QList<Modes> modeListBar2 = {
@@ -20,7 +23,7 @@ const QList<Modes> modeListBar3 = {
 };
 
 const QList<Modes> modeListBar4 = {
-    {{Qt::Key_unknown, "."}}, {{Qt::Key_0, "0"}}, {{Qt::Key_Space, " ", "空格"}}, {{Qt::Key_unknown, ":"}},
+    {{Qt::Key_unknown, "."}}, {{Qt::Key_0, "0"}}, {{Qt::Key_Space, " "}}, {{Qt::Key_unknown, ":"}},
 };
 
 NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
@@ -37,6 +40,12 @@ NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
 
         for (int i = 0; i < 4; i++) {
             KeyButton *button = createButton(list[i]);
+            if (list[i].first().key == Qt::Key_Backspace) {
+                button->setIcon(QIcon(s_backspace_icon));
+            }
+            else if (list[i].first().key == Qt::Key_Space) {
+                button->setIcon(QIcon(s_space_icon));
+            }
             h->addWidget(button);
         }
 
