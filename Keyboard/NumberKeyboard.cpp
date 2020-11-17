@@ -8,19 +8,19 @@ typedef QList<KeyButton::Mode> Modes;
 typedef QList<Modes> ModesList;
 
 const QList<Modes> modeListBar1 = {
-    {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, "", "Back"}},
+    {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, "", "删除"}},
 };
 
 const QList<Modes> modeListBar2 = {
-    {{Qt::Key_4, "4"}}, {{Qt::Key_5, "5"}}, {{Qt::Key_6, "6"}}, {{Qt::Key_unknown, "OK"}},
+    {{Qt::Key_4, "4"}}, {{Qt::Key_5, "5"}}, {{Qt::Key_6, "6"}}, {{Qt::Key_unknown, "", "收起"}},
 };
 
 const QList<Modes> modeListBar3 = {
-    {{Qt::Key_7, "7"}}, {{Qt::Key_8, "8"}}, {{Qt::Key_9, "9"}}, {{Qt::Key_Minus, "-"}},
+    {{Qt::Key_7, "7"}}, {{Qt::Key_8, "8"}}, {{Qt::Key_9, "9"}}, {{Qt::Key_Minus, ","}},
 };
 
 const QList<Modes> modeListBar4 = {
-    {{Qt::Key_unknown, "."}}, {{Qt::Key_0, "0"}}, {{Qt::Key_unknown, "<"}}, {{Qt::Key_unknown, ">"}},
+    {{Qt::Key_unknown, "."}}, {{Qt::Key_0, "0"}}, {{Qt::Key_Space, " ", "空格"}}, {{Qt::Key_unknown, ":"}},
 };
 
 NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
