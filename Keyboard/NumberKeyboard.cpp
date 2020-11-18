@@ -9,13 +9,14 @@ typedef QList<Modes> ModesList;
 
 static const QString s_backspace_icon = ":/Image/backspace.png";
 static const QString s_space_icon     = ":/Image/space.png";
+static const QString s_pack_up_icon   = ":/Image/pack_up.png";
 
 const QList<Modes> modeListBar1 = {
     {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, ""}},
 };
 
 const QList<Modes> modeListBar2 = {
-    {{Qt::Key_4, "4"}}, {{Qt::Key_5, "5"}}, {{Qt::Key_6, "6"}}, {{Qt::Key_unknown, "", "收起"}},
+    {{Qt::Key_4, "4"}}, {{Qt::Key_5, "5"}}, {{Qt::Key_6, "6"}}, {{Qt::Key_Escape, ""}},
 };
 
 const QList<Modes> modeListBar3 = {
@@ -38,13 +39,16 @@ NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
         QHBoxLayout *h = new QHBoxLayout;
         h->setSizeConstraint(QLayout::SetNoConstraint);
 
-        for (int i = 0; i < 4; i++) {
-            KeyButton *button = createButton(list[i]);
-            if (list[i].first().key == Qt::Key_Backspace) {
+        foreach (Modes iter, list) {
+            KeyButton *button = createButton(iter);
+            if (iter.first().key == Qt::Key_Backspace) {
                 button->setIcon(QIcon(s_backspace_icon));
             }
-            else if (list[i].first().key == Qt::Key_Space) {
+            else if (iter.first().key == Qt::Key_Space) {
                 button->setIcon(QIcon(s_space_icon));
+            }
+            else if (iter.first().key == Qt::Key_Escape) {
+                button->setIcon(QIcon(s_pack_up_icon));
             }
             h->addWidget(button);
         }
