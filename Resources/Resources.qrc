@@ -6,5 +6,6 @@
         <file>Image/enter.png</file>
         <file>Image/space.png</file>
         <file>Image/caplock.png</file>
+        <file>Image/pack_up.png</file>
     </qresource>
 </RCC>
