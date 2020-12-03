@@ -3,7 +3,6 @@ Author: Qt君
 微信公众号: Qt君(首发)
 QQ群: 732271126
 Email: 2088201923@qq.com
-LICENSE: MIT
 **********************************************************/
 #include "Keyboard.h"
 #include "NumberKeyboard.h"

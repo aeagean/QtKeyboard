@@ -1,4 +1,11 @@
-﻿#include "NumberKeyboard.h"
+﻿/*
+#Author: Qtjun
+#WeChat Official Accounts: qthub_com
+#QQ Group: 732271126
+#Email: 2088201923@qq.com
+*/
+
+#include "NumberKeyboard.h"
 #include "KeyButton.h"
 #include <QVBoxLayout>
 

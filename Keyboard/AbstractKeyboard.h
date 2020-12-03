@@ -1,9 +1,8 @@
 ﻿/**********************************************************
-Author: Qt君
-微信公众号: Qt君(首发)
-QQ群: 732271126
-Email: 2088201923@qq.com
-LICENSE: MIT
+#Author: Qtjun
+#WeChat Official Accounts: qthub_com
+#QQ Group: 732271126
+#Email: 2088201923@qq.com
 **********************************************************/
 
 #ifndef AEA_ABSTRACT_KEYBOARD_H
