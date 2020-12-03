@@ -54,9 +54,16 @@ KeyButton::Mode KeyButton::findNext()
     return m_modes.first();
 }
 
-void KeyButton::setText(const QString &text)
+void KeyButton::setDisplayContent(const QVariant &content)
 {
-    QPushButton::setText(QString::fromUtf8(text.toStdString().data()));
+    if (content.type() == QVariant::String) {
+        const QString &text = content.toString().toStdString().data();
+        QPushButton::setText(text);
+    }
+    else if (content.type() == QVariant::Icon) {
+        const QIcon &icon = content.value<QIcon>();
+        QPushButton::setIcon(icon);
+    }
 }
 
 KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
@@ -80,7 +87,7 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
 
     if (!modes.isEmpty()) {
         m_preMode = m_mode = m_modes.first();
-        setText(m_mode.display);
+        setDisplayContent(m_mode.display);
     }
 
     connect(this, SIGNAL(pressed()), this, SLOT(onPressed()));
@@ -103,7 +110,7 @@ void KeyButton::switchCapsLock()
 
     m_preMode = m_mode;
     m_mode = find(m_mode.type == LowerCase ? UpperCase : LowerCase);
-    setText(m_mode.display);
+    setDisplayContent(m_mode.display);
 }
 
 void KeyButton::switchSpecialChar()
@@ -116,13 +123,13 @@ void KeyButton::switchSpecialChar()
         m_mode = find(SpecialChar);
     }
 
-    setText(m_mode.display);
+    setDisplayContent(m_mode.display);
 }
 
 void KeyButton::switching()
 {
     m_mode = findNext();
-    setText(m_mode.display);
+    setDisplayContent(m_mode.display);
 }
 
 void KeyButton::onPressed()

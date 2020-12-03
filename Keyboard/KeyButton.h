@@ -10,6 +10,7 @@ LICENSE: MIT
 #define AEA_KEY_BUTTON_H
 
 #include <QPushButton>
+#include <QVariant>
 
 namespace AeaQt {
 
@@ -21,7 +22,7 @@ public:
 
     struct Mode {
         Mode() { }
-        Mode(int _key, QString _value, QString _display = QString(), Type _type = Auto)
+        Mode(int _key, QString _value, QVariant _display = QString(), Type _type = Auto)
         {
             key     = _key;
             value   = _value;
@@ -31,7 +32,7 @@ public:
 
         int key;          /* Qt::Key */
         QString value;    /* text */
-        QString display;  /* display text */
+        QVariant display;  /* display text or icon */
         Type type;        /* default: Auto */
     };
 
@@ -54,7 +55,7 @@ private:
     Type find(const QString &value);
     Mode find(Type type);
     Mode findNext();
-    void setText(const QString &text);
+    void setDisplayContent(const QVariant &content);
 
 private:
     Mode        m_preMode;

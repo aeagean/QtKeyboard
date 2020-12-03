@@ -12,19 +12,31 @@ static const QString s_space_icon     = ":/Image/space.png";
 static const QString s_pack_up_icon   = ":/Image/pack_up.png";
 
 const QList<Modes> modeListBar1 = {
-    {{Qt::Key_1, "1"}}, {{Qt::Key_2, "2"}}, {{Qt::Key_3, "3"}}, {{Qt::Key_Backspace, ""}},
+    {{Qt::Key_1, "1"}},
+    {{Qt::Key_2, "2"}},
+    {{Qt::Key_3, "3"}},
+    {{Qt::Key_Backspace, "", QIcon(s_backspace_icon)}},
 };
 
 const QList<Modes> modeListBar2 = {
-    {{Qt::Key_4, "4"}}, {{Qt::Key_5, "5"}}, {{Qt::Key_6, "6"}}, {{Qt::Key_Escape, ""}},
+    {{Qt::Key_4, "4"}},
+    {{Qt::Key_5, "5"}},
+    {{Qt::Key_6, "6"}},
+    {{Qt::Key_Escape, "", QIcon(s_pack_up_icon)}},
 };
 
 const QList<Modes> modeListBar3 = {
-    {{Qt::Key_7, "7"}}, {{Qt::Key_8, "8"}}, {{Qt::Key_9, "9"}}, {{Qt::Key_Minus, ","}},
+    {{Qt::Key_7, "7"}},
+    {{Qt::Key_8, "8"}},
+    {{Qt::Key_9, "9"}},
+    {{Qt::Key_Minus, ","}},
 };
 
 const QList<Modes> modeListBar4 = {
-    {{Qt::Key_unknown, "."}}, {{Qt::Key_0, "0"}}, {{Qt::Key_Space, " "}}, {{Qt::Key_unknown, ":"}},
+    {{Qt::Key_unknown, "."}},
+    {{Qt::Key_0, "0"}},
+    {{Qt::Key_Space, " ", QIcon(s_space_icon)}},
+    {{Qt::Key_unknown, ":"}},
 };
 
 NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
@@ -41,15 +53,6 @@ NumberKeyboard::NumberKeyboard(QWidget *parent) : AbstractKeyboard(parent)
 
         foreach (Modes iter, list) {
             KeyButton *button = createButton(iter);
-            if (iter.first().key == Qt::Key_Backspace) {
-                button->setIcon(QIcon(s_backspace_icon));
-            }
-            else if (iter.first().key == Qt::Key_Space) {
-                button->setIcon(QIcon(s_space_icon));
-            }
-            else if (iter.first().key == Qt::Key_Escape) {
-                button->setIcon(QIcon(s_pack_up_icon));
-            }
             h->addWidget(button);
         }
 
