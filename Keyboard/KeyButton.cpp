@@ -57,11 +57,12 @@ void KeyButton::setDisplayContent(const QVariant &content)
 {
     if (content.type() == QVariant::String) {
         const QString &text = content.toString().toStdString().data();
-        QPushButton::setText(text);
+        this->setText(text);
     }
     else if (content.type() == QVariant::Icon) {
         const QIcon &icon = content.value<QIcon>();
-        QPushButton::setIcon(icon);
+        this->setIcon(icon);
+        this->setIconSize(QSize(1.2 * width(), 1.2 * height()));
     }
 }
 
@@ -71,7 +72,6 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
     Q_ASSERT(!modes.isEmpty());
     this->setFocusPolicy(Qt::NoFocus);
     this->setStyleSheet(DEFAULT_STYLE_SHEET);
-    this->setIconSize(QSize(width(), height()));
 
     foreach (Mode mode, modes) {
         if (mode.type == Auto) {
