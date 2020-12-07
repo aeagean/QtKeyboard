@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
     ///////////////////////////////
     QWidget window2;
     window2.setWindowTitle(QStringLiteral("数字键盘 by Qt君"));
-    window2.resize(550, 370);
+    window2.resize(450, 370);
 
     NumberKeyboard keyboard2;
     keyboard2.show();
