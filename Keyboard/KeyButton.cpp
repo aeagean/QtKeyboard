@@ -72,6 +72,7 @@ KeyButton::KeyButton(const QList<KeyButton::Mode> modes, QWidget *parent) :
     Q_ASSERT(!modes.isEmpty());
     this->setFocusPolicy(Qt::NoFocus);
     this->setStyleSheet(DEFAULT_STYLE_SHEET);
+    this->setAutoRepeat(true);
 
     foreach (Mode mode, modes) {
         if (mode.type == Auto) {
