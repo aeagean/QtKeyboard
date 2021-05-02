@@ -48,15 +48,15 @@ const QList<Modes> modeListBar1 = {
 };
 
 const QList<Modes> modeListBar2 = {
-    {{Qt::Key_A, "a"}, {Qt::Key_A, "A"}, {Qt::Key_unknown, "~"}},
-    {{Qt::Key_S, "s"}, {Qt::Key_S, "S"}, {Qt::Key_unknown, "!"}},
-    {{Qt::Key_D, "d"}, {Qt::Key_D, "D"}, {Qt::Key_At,      "@"}},
-    {{Qt::Key_F, "f"}, {Qt::Key_F, "F"}, {Qt::Key_NumberSign, "#"}},
-    {{Qt::Key_G, "g"}, {Qt::Key_G, "G"}, {Qt::Key_Percent, "%"}},
-    {{Qt::Key_H, "h"}, {Qt::Key_H, "H"}, {Qt::Key_unknown, "."}},
+    {{Qt::Key_A, "a"}, {Qt::Key_A, "A"}, {Qt::Key_unknown, "."}},
+    {{Qt::Key_S, "s"}, {Qt::Key_S, "S"}, {Qt::Key_unknown, "?"}},
+    {{Qt::Key_D, "d"}, {Qt::Key_D, "D"}, {Qt::Key_At,      "!"}},
+    {{Qt::Key_F, "f"}, {Qt::Key_F, "F"}, {Qt::Key_NumberSign, "*"}},
+    {{Qt::Key_G, "g"}, {Qt::Key_G, "G"}, {Qt::Key_Percent, "#"}},
+    {{Qt::Key_H, "h"}, {Qt::Key_H, "H"}, {Qt::Key_unknown, "\""}},
     {{Qt::Key_J, "j"}, {Qt::Key_J, "J"}, {Qt::Key_unknown, "&", "&&"}},
-    {{Qt::Key_K, "k"}, {Qt::Key_K, "K"}, {Qt::Key_unknown, "*"}},
-    {{Qt::Key_L, "l"}, {Qt::Key_L, "L"}, {Qt::Key_unknown, "?"}},
+    {{Qt::Key_K, "k"}, {Qt::Key_K, "K"}, {Qt::Key_unknown, "%"}},
+    {{Qt::Key_L, "l"}, {Qt::Key_L, "L"}, {Qt::Key_unknown, "@"}},
 };
 
 const QList<Modes> modeListBar3 = {
@@ -73,7 +73,7 @@ const QList<Modes> modeListBar3 = {
 
 const QList<Modes> modeListBar4 = {
     {{Qt::Key_Mode_switch, "",  "?123"}},
-    {{Qt::Key_Context1,    "",  "En"},    {Qt::Key_Context1, "", "中"}},
+    {{Qt::Key_Context1,    "",  "En"},    {Qt::Key_Context1, "", QStringLiteral("中")}},
     {{Qt::Key_Space,       " ", ""/*空格*/}},
     {{Qt::Key_Enter,       "",  ""/*换行*/}}
 };
