@@ -363,8 +363,13 @@ void ChineseWidget::setText(const QString &text)
         if (each.first.left(text.count()) != text)
             continue;
 
-        /* 添加到候选栏 */
-        addOneItem(each.second);
+        /* 添加到候选栏, 并限制数量 */
+        if (this->count() <= 30) {
+            addOneItem(each.second);
+        }
+        else {
+            break;
+        }
     }
 }
 
