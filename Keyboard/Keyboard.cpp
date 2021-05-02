@@ -469,7 +469,7 @@ void ChineseWidget::loadChinesePhraseLib()
 
 void ChineseWidget::loadGoogleChineseLib()
 {
-    QFile file(":/GoogleChineseLib/rawdict_utf16_65105_freq.txt");
+    QFile file(":/GoogleChineseLib/rawdict_utf16_65105_freq_sort.txt");
     if (! file.open(QIODevice::ReadOnly)) {
         qDebug() << "Open pinyin file failed!" << file.fileName();
         return;
@@ -504,8 +504,10 @@ void ChineseWidget::loadGoogleChineseLib()
             }
 
             QList<QPair<QString, QString> > &list = m_data[pinyin.left(1)];
-            /* 将'拼音(缩写)'和'词组'写入匹配容器 */
-            list.append(qMakePair(abb, hanzi));
+            if (strList.count() > 1) {
+                /* 将'拼音(缩写)'和'词组'写入匹配容器 */
+                list.append(qMakePair(abb, hanzi));
+            }
             /* 将'拼音(全拼)'和'词组'写入匹配容器 */
             list.append(qMakePair(pinyin.remove(" "), hanzi));
         }

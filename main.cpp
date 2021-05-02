@@ -9,6 +9,7 @@ Email: 2088201923@qq.com
 
 #include <QApplication>
 #include <QLineEdit>
+#include <QFontDatabase>
 
 using namespace AeaQt;
 
@@ -25,6 +26,13 @@ static const QString qss = "                               \
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
+
+#ifdef ENABLED_WQY_FONT
+    int fontId = QFontDatabase::addApplicationFont(":/Font/wqy-microhei.ttc");
+    QStringList stringList = QFontDatabase::applicationFontFamilies(fontId);
+    QFont font(stringList.first());
+    a.setFont(font);
+#endif
 
     QWidget window;
 
