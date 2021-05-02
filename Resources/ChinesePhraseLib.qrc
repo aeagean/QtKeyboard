@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>ChinesePhraseLib/pinyin_phrase.txt</file>
+    </qresource>
+</RCC>

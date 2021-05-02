@@ -294,8 +294,17 @@ void Keyboard::resizeButton()
 ChineseWidget::ChineseWidget(QWidget *parent) :
     QListWidget(parent)
 {
-    loadData();
-    loadData2();
+#ifdef ENABLED_CHINESE_LIB
+    loadChineseLib();
+#endif
+
+#ifdef ENABLED_CHINESE_PHRASE_LIB
+    loadChinesePhraseLib();
+#endif
+
+#ifdef ENABLED_GOOGLE_CHINESE_LIB
+    loadGoogleChineseLib();
+#endif
 
     setFocusPolicy(Qt::NoFocus);
     /* 设置为列表显示模式 */
@@ -388,7 +397,7 @@ void ChineseWidget::addOneItem(const QString &text)
     addItem(item);
 }
 
-void ChineseWidget::loadData()
+void ChineseWidget::loadChineseLib()
 {
     QFile pinyin(":/ChineseLib/pinyin.txt");
     if (! pinyin.open(QIODevice::ReadOnly)) {
@@ -410,12 +419,14 @@ void ChineseWidget::loadData()
         QList<QPair<QString, QString> > &tmp = m_data[first.left(1)];
         tmp.append(qMakePair(first, second));
     }
+
+    pinyin.close();
 }
 
-void ChineseWidget::loadData2()
+void ChineseWidget::loadChinesePhraseLib()
 {
     /* 加载词组字库内容 */
-    QFile pinyin(":/ChineseLib/pinyin_phrase.txt");
+    QFile pinyin(":/ChinesePhraseLib/pinyin_phrase.txt");
     if (! pinyin.open(QIODevice::ReadOnly)) {
         qDebug() << "Open pinyin file failed!";
         return;
@@ -452,4 +463,56 @@ void ChineseWidget::loadData2()
             tmp.append(qMakePair(first.remove(" "), second));
         }
     }
+
+    pinyin.close();
+}
+
+void ChineseWidget::loadGoogleChineseLib()
+{
+    QFile file(":/GoogleChineseLib/rawdict_utf16_65105_freq.txt");
+    if (! file.open(QIODevice::ReadOnly)) {
+        qDebug() << "Open pinyin file failed!" << file.fileName();
+        return;
+    }
+
+    QTextStream in(&file);
+    in.setCodec("UTF-16"); // change the file codec to UTF-16.
+
+    QStringList lines = in.readAll().split("\n");
+
+    for (QString each : lines) {
+        QRegExp re(R"RX((\S+).((?:-?\d+)(?:\.\d+)).((?:-?\d+)(?:\.\d+)?).(.*))RX");
+        int pos = 0;
+
+        bool isMatching = false;
+        while ((pos = re.indexIn(each, pos)) != -1) {
+            pos += re.matchedLength();
+            if (re.captureCount() != 4)
+                continue;
+
+            isMatching = true;
+            QString hanzi = re.cap(1); // 汉字
+            QString weight = re.cap(2); // 权重
+            QString tmp = re.cap(3); // 未知
+            QString pinyin = re.cap(4); // 拼音(可能是词组)
+
+            QStringList strList = pinyin.split(" ");
+            QString abb;
+            for (int i = 0; i < strList.count(); i++) {
+                /* 获得拼音词组的首字母(用于缩写匹配) */
+                abb += strList.at(i).left(1);
+            }
+
+            QList<QPair<QString, QString> > &list = m_data[pinyin.left(1)];
+            /* 将'拼音(缩写)'和'词组'写入匹配容器 */
+            list.append(qMakePair(abb, hanzi));
+            /* 将'拼音(全拼)'和'词组'写入匹配容器 */
+            list.append(qMakePair(pinyin.remove(" "), hanzi));
+        }
+
+        if (!isMatching)
+            qDebug() << each;
+    }
+
+    file.close();
 }

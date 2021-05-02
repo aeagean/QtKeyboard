@@ -36,5 +36,20 @@ HEADERS  += \
     Keyboard/Keyboard.h \
     Keyboard/NumberKeyboard.h
 
-RESOURCES += \
-    Resources/Resources.qrc
+RESOURCES += Resources/Image.qrc
+
+#DEFINES += ENABLED_CHINESE_LIB
+#DEFINES += ENABLED_CHINESE_PHRASE_LIB
+DEFINES += ENABLED_GOOGLE_CHINESE_LIB
+
+contains(DEFINES, ENABLED_CHINESE_LIB) {
+    RESOURCES += Resources/ChineseLib.qrc
+}
+
+contains(DEFINES, ENABLED_CHINESE_PHRASE_LIB) {
+    RESOURCES += Resources/ChinesePhraseLib.qrc
+}
+
+contains(DEFINES, ENABLED_GOOGLE_CHINESE_LIB) {
+    RESOURCES += Resources/GoogleChineseLib.qrc
+}

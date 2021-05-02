@@ -27,6 +27,7 @@ int main(int argc, char *argv[])
     QApplication a(argc, argv);
 
     QWidget window;
+
     window.setWindowTitle(QStringLiteral("QtKeyboard by Qt君"));
     window.resize(850, 370);
 

@@ -1,7 +1,5 @@
 <RCC>
     <qresource prefix="/">
-        <file>ChineseLib/pinyin.txt</file>
-        <file>ChineseLib/pinyin_phrase.txt</file>
         <file>Image/backspace.png</file>
         <file>Image/enter.png</file>
         <file>Image/space.png</file>

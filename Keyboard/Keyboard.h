@@ -32,8 +32,9 @@ private slots:
 
 private:
     void addOneItem(const QString &text);
-    void loadData();
-    void loadData2();
+    void loadChineseLib();
+    void loadChinesePhraseLib();
+    void loadGoogleChineseLib();
 
 private:
     QMap<QString, QList<QPair<QString, QString> > > m_data;

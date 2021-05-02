@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>GoogleChineseLib/rawdict_utf16_65105_freq.txt</file>
+    </qresource>
+</RCC>

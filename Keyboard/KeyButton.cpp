@@ -97,8 +97,7 @@ KeyButton::Mode KeyButton::mode()
     return m_mode;
 }
 
-void KeyButton::onReponse(const QObject *receiverObj, const QString &receiver)
-{
+void KeyButton::onReponse(const QObject *receiverObj, const QString &receiver) {
     connect(this, SIGNAL(pressed(int,QString)), receiverObj, receiver.toStdString().c_str());
 }
 
